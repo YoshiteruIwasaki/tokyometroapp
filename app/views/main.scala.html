@@ -1,4 +1,4 @@
-@(title: String)(content: Html)
+@(title: String)(content: Html)(js: Html)
 
 <!DOCTYPE html>
 
@@ -15,5 +15,6 @@
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("lib/jquery.event.drag-2.2.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("slick.core.js"))'></script>
         <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("slick.grid.js"))'></script>
+        @js
     </body>
 </html>
