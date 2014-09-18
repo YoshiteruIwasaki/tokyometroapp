@@ -1,6 +1,19 @@
 @()
 
 @main("東京メトロオープンデータサンプルAPI") {
-
+<div id="json"></div>
 }{
+<script>
+$(function() {
+	$.ajax({
+	  type: 'GET',
+	  url: '/api/TrainInformation  ',
+	  dataType: 'json',
+	  success: function(json){
+		  console.log(json);
+	  $('#json').JSONView(json);
+	  }
+	});
+});
+</script>
 }
