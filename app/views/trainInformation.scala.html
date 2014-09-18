@@ -7,11 +7,17 @@
 $(function() {
 	$.ajax({
 	  type: 'GET',
-	  url: '/api/TrainInformation  ',
+	  url: '/api/TrainInformation',
 	  dataType: 'json',
 	  success: function(json){
-		  console.log(json);
-	  $('#json').JSONView(json);
+      var len = json.length;
+      for(var i=0; i < len; i++){
+        $object = $("<div/>").attr("id","json" + (i+1));
+	    $('#json').append($object);
+	    $('#json' + (i+1)).JSONView(json[i]);
+      }
+	  },
+	  error: function(json){
 	  }
 	});
 });
