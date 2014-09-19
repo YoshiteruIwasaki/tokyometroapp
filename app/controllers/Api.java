@@ -1,5 +1,6 @@
 package controllers;
 
+import play.Logger;
 import play.Play;
 import play.libs.F.Function;
 import play.libs.F.Promise;
@@ -20,10 +21,15 @@ public class Api extends Controller {
 		builder.append("acl:consumerKey=");
 		builder.append(apikey);
 
+		Logger.debug(builder.toString());
+
 		final Promise<Result> resultPromise = WS.url(builder.toString()).get()
 				.map(new Function<WSResponse, Result>() {
 					public Result apply(WSResponse response) {
-						return ok(response.asJson());
+						if (response.getStatus() == 200) {
+							return ok(response.asJson());
+						}
+						return ok("");
 					}
 				});
 		return resultPromise;
