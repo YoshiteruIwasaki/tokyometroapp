@@ -1,0 +1,51 @@
+@()
+
+@main("東京メトロオープンデータサンプルAPI") {
+@*********************
+<div id="table1"></div>
+*********************@
+<div id="columns"></div>
+}{
+<script src="@routes.Assets.at("javascripts/columns/jquery.columns.min.js")" type="text/javascript"></script>
+@*********************
+<script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("underscore-min.js"))'></script>
+<script src="@routes.Assets.at("javascripts/tabler/tabler.js")" type="text/javascript"></script>
+<script>
+$(function() {
+    var table1 = tabler.create({
+        className: 'table'
+    });
+	$.ajax({
+	  type: 'GET',
+	  url: '/api/TrainInformation',
+	  dataType: 'json',
+	  success: function(json){
+	  table1.load(json);
+	  table1.render();
+	  $('#table1').html(table1.$el);
+	  },
+	  error: function(json){
+	  }
+	});
+});
+</script>
+*********************@
+<script>
+$(function() {
+	$.ajax({
+	  type: 'GET',
+	  url: '/api/TrainInformation',
+	  dataType: 'json',
+	  success: function(json){
+	  $('#columns').columns({
+      data:json
+      });
+	  },
+	  error: function(json){
+	  }
+	});
+});
+</script>
+}{
+<link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/columns/clean.css")">
+}
