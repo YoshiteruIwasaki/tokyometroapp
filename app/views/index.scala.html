@@ -10,46 +10,58 @@
       <div class="row">
         <div class="col-md-12">
 		  <div class="btn-group  btn-group-sm">
-			  <button type="button" class="btn btn-default">列車ロケーション情報	</button>
-			  <button type="button" class="btn btn-default">運行情報</button>
-			  <button type="button" class="btn btn-default">駅時刻表</button>
-			  <button type="button" class="btn btn-default">施設情報</button>
-			  <button type="button" class="btn btn-default">駅情報</button>
-			  <button type="button" class="btn btn-default">運賃情報</button>
-			  <button type="button" class="btn btn-default">地物（駅出入口）情報</button>
-			  <button type="button" class="btn btn-default">地物（駅）情報</button>
-			  <button type="button" class="btn btn-default">地物（線路）情報</button>
-			  <button type="button" class="btn btn-default">東京メトロ駅情報</button>
-			  <button type="button" class="btn btn-default">東京メトロ路線情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:Train',this,'列車ロケーション情報','');">列車ロケーション情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:TrainInformation',this,'運行情報','');">運行情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:StationTimetable',this,'駅時刻表','&odpt:station=odpt.Station:TokyoMetro.Ginza.AoyamaItchome');">駅時刻表</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:StationFacility',this,'施設情報（駅施設情報）','');">施設情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:PassengerSurvey',this,'駅情報（乗降人員数）','');">駅情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:RailwayFare',this,'運賃情報','');">運賃情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('ug:Poi',this,'地物（駅出入口）情報','');">地物（駅出入口）情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('mlit:Station',this,'国土交通省国土数値情報 地物（駅）情報','');">地物（駅）情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('mlit:Railway',this,'国土交通省国土数値情報 地物（線路）情報','');">地物（線路）情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:Station',this,'東京メトロ駅情報','');">東京メトロ駅情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:Railway',this,'東京メトロ路線情報','');">東京メトロ路線情報</button>
 		  </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-12">
-        <h2>列車ロケーション情報</h2>
-        <p class="lead">odpt:Train</p>
-        <div id="contents"  class="table-responsive"></div>
+        <h2 id="name">東京メトロオープンデータサンプルAPI</h2>
+        <p class="lead" id="description">ボタンをクリックすることでAPIのレスポンスを確認することが出来ます。</p>
+        <div id="contents" class="table-responsive"></div>
         </div>
 	  </div>
 
       </div>
 }{
 <script>
-$(function() {
+
+    $.ajaxRequest = function(param, button, name, option){
+    if($(".active").length){
+     $(".active").removeClass('active');
+     $('#contents').columns('destroy');
+    }
 	$.ajax({
 	  type: 'GET',
-	  url: '/api/odpt:Train',
+	  url: '/api/'+param + option,
 	  dataType: 'json',
 	  success: function(json){
-	  console.log(json);
-	  $('#contents').columns({
-      data:json
-      });
+	    console.log(json);
+	    $("#contents").empty();
+        $('#name').text(name);
+        $('#description').text(param);
+        if(option.length){
+        $('#description').text(param + " 追加パラメータ:"+option);
+        }
+        $(button).addClass('active');
+	    $('#contents').columns({
+          data:json
+        });
 	  },
 	  error: function(json){
 	  }
 	});
-});
+    };
 </script>
 }{
 <link rel="stylesheet" media="screen" href="@routes.Assets.at("stylesheets/clean.css")">
