@@ -15,7 +15,11 @@ public class Api extends Controller {
 		String apikey = Play.application().configuration()
 				.getString("application.apikey");
 		StringBuilder builder = new StringBuilder();
-		builder.append("https://api.tokyometroapp.jp/api/v2/datapoints?");
+		if(type.startsWith("mlit:Station") || type.startsWith("mlit:Railway")){
+			builder.append("https://api.tokyometroapp.jp/api/v2/places?");
+		}else{
+			builder.append("https://api.tokyometroapp.jp/api/v2/datapoints?");
+		}
 		builder.append("rdf:type=");
 		builder.append(type);
 		builder.append("&");

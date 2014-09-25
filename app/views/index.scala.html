@@ -17,8 +17,8 @@
 			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:PassengerSurvey',this,'駅情報（乗降人員数）','');">駅情報</button>
 			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:RailwayFare',this,'運賃情報','');">運賃情報</button>
 			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('ug:Poi',this,'地物（駅出入口）情報','');">地物（駅出入口）情報</button>
-			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('mlit:Station',this,'国土交通省国土数値情報 地物（駅）情報','');">地物（駅）情報</button>
-			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('mlit:Railway',this,'国土交通省国土数値情報 地物（線路）情報','');">地物（線路）情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('mlit:Station',this,'国土交通省国土数値情報 地物（駅）情報','&lat=35.672089&lon=139.770592&radius=300');">地物（駅）情報</button>
+			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('mlit:Railway',this,'国土交通省国土数値情報 地物（線路）情報','&lat=35.672089&lon=139.770592&radius=300');">地物（線路）情報</button>
 			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:Station',this,'東京メトロ駅情報','');">東京メトロ駅情報</button>
 			  <button type="button" class="btn btn-default" onclick="$.ajaxRequest('odpt:Railway',this,'東京メトロ路線情報','');">東京メトロ路線情報</button>
 		  </div>
@@ -28,7 +28,8 @@
         <div class="col-md-12">
         <h2 id="name">東京メトロオープンデータサンプルAPI</h2>
         <p class="lead" id="description">ボタンをクリックすることでAPIのレスポンスを確認することが出来ます。</p>
-        <div id="contents" class="table-responsive"></div>
+        <div id="contents" class="table-responsive" style="display:none;"></div>
+        <div id="json" class="table-responsive"></div>
         </div>
 	  </div>
 
@@ -39,7 +40,7 @@
     $.ajaxRequest = function(param, button, name, option){
     if($(".active").length){
      $(".active").removeClass('active');
-     $('#contents').columns('destroy');
+  //   $('#contents').columns('destroy');
     }
 	$.ajax({
 	  type: 'GET',
@@ -48,15 +49,22 @@
 	  success: function(json){
 	    console.log(json);
 	    $("#contents").empty();
+	    $("#json").empty();
         $('#name').text(name);
         $('#description').text(param);
         if(option.length){
         $('#description').text(param + " 追加パラメータ:"+option);
         }
         $(button).addClass('active');
-	    $('#contents').columns({
-          data:json
-        });
+        var len = json.length;
+        for(var i=0; i < len; i++){
+          $object = $("<div/>").attr("id","json" + (i+1));
+  	    $('#json').append($object);
+  	    $('#json' + (i+1)).JSONView(json[i]);
+        }
+	//    $('#contents').columns({
+    //      data:json
+    //    });
 	  },
 	  error: function(json){
 	  }
